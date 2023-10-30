@@ -9,7 +9,7 @@ class Rectangle:
     Attributes:
         width (int): The width of the rectangle.
         height (int): The height of the rectangle.
-        number_of_instances (int): The number of instances of the Rectangle class.
+        number_of_instances (int): no. of instances of the Rectangle class.
     """
 
     number_of_instances = 0
