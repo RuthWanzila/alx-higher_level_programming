@@ -2,16 +2,16 @@
 """101-nqueens finds all possible solutions the N queens puzzle, including
 translations and reflections.
 
-This program uses virtual backtracking without recursion. In local tests,
-the process will
+Attempted virtual backtracking without recursion. In local tests process will
 start to slow down visibly for N > 8, and is successful up to N = 11 but
 will be killed if used for N > 11. Recursion could allow for a lighter weight
-process, but it's not yet apparent how to retain a record of
+process, but it's not yet apparent to this student how to retain a record of
 which solutions are already derived with that method.
 
 Attributes:
-    N (int): base no. of queens,also length of board side in piece positions
-    candidates (list): list of successful slns for given columns checked
+    N (int): base number of queens, and length of board side in piece positions
+    candidates (list) of (list) of (list) of (int): list of all successful
+        solutions for given amount of columns checked
 
 """
 from sys import argv
@@ -36,11 +36,11 @@ def board_column_gen(board=[]):
     queen arrangements in that column.
 
     Args:
-        board (list): A 2D list of integers, only as wide as needed to test
-        the rightmost column for queen conflicts.
+        board (list) of (list) of (int): 2D list of ints, only as wide as
+        needed to test the rightmost column for queen conflicts.
 
     Returns:
-        list: The modified 2D list.
+        modified 2D list
 
     """
     if len(board):
@@ -53,30 +53,32 @@ def board_column_gen(board=[]):
 
 
 def add_queen(board, row, col):
-    """Sets a queen, represented by 1, to the given coordinates in the board.
+    """Sets "queen," or 1, to coordinates given in board.
 
     Args:
-        board (list): A 2D list of integers, only as wide as needed to test
-        the rightmost column for queen conflicts.
-        row (int): The first dimension index.
-        col (int): The second dimension index.
+        board (list) of (list) of (int): 2D list of ints, only as wide as
+            needed to test the rightmost column for queen conflicts.
+        row (int): first dimension index
+        col (int): second dimension index
 
     """
     board[row][col] = 1
 
 
 def new_queen_safe(board, row, col):
-    """Checks if a new queen placed in the rightmost column of the board
-    has any conflicts with existing queens.
+    """For the board given, checks that for a new queen placed in the rightmost
+    column, there are no other "queen"s, or 1 values, in the martix to the
+    left, and diagonally up-left and down-left.
 
     Args:
-        board (list): 2D list of integers, only as wide as needed
-        to test the rightmost column for queen conflicts.
-        row (int): The first dimension index.
-        col (int): The second dimension index.
+        board (list) of (list) of (int): 2D list of ints, only as wide as
+            needed to test the rightmost column for queen conflicts.
+        row (int): first dimension index
+        col (int): second dimension index
 
     Returns:
-        bool: True if no conflicts are found, False otherwise.
+        True if no left side conflicts found for new queen, or False if a
+    conflict is found.
 
     """
     x = row
@@ -84,14 +86,14 @@ def new_queen_safe(board, row, col):
 
     for i in range(1, N):
         if (y - i) >= 0:
-            # Check up-left diagonal
+            # check up-left diagonal
             if (x - i) >= 0:
                 if board[x - i][y - i]:
                     return False
-            # Check left
+            # check left
             if board[x][y - i]:
                 return False
-            # Check down-left diagonal
+            # check down-left diagonal
             if (x + i) < N:
                 if board[x + i][y - i]:
                     return False
@@ -99,14 +101,19 @@ def new_queen_safe(board, row, col):
 
 
 def coordinate_format(candidates):
-    """Converts a board (matrix of 1s and 0s)
-    into a list of coordinates for each queen
+    """Converts a board (matrix of 1 and 0) into a series of row/column
+    indicies of each queen/1.
 
     Args:
-        candidates (list): list of all successful slns for columns last checked
+    candidates (list) of (list) of (list) of (int): list of all successful
+        solutions for amount of columns last checked
+
+    Attributes:
+        holberton (list) of (list) of (int): each member list contains the row
+    column number for each queen found
 
     Returns:
-        list: Each member list contains the row and column no. for queen found
+        holberton, the list of coordinates
 
     """
     holberton = []
@@ -121,32 +128,33 @@ def coordinate_format(candidates):
     return holberton
 
 
-# Initialize candidates list with the first column of zeros
+# init candidates list with first column of 0s
 candidates = []
 candidates.append(board_column_gen())
 
-# Proceed column by column, testing the rightmost
+# proceed column by column, testing the rightmost
 for col in range(N):
-    # Start a new generation of the candidate list for every round of testing
+    # start a new generation of the candidate list for every round of testing
     new_candidates = []
-    # Test each candidate from the previous round at the current column
+    # test each candidate from previous round, at current column
     for matrix in candidates:
-        # For every row in that candidate's rightmost column
+        # for every row in that candidate's rightmost column
         for row in range(N):
-            # Check if any conflicts in placing a queen at those coordinates
+            # are there any conflicts in placing a queen at those coordinates?
             if new_queen_safe(matrix, row, col):
-                # Create a "child" (copy) of that candidate
+                # no? then create a "child" (copy) of that candidate
                 temp = [line[:] for line in matrix]
-                # Place a queen in that position
+                # place a queen in that position
                 add_queen(temp, row, col)
-                # Add a new column of zeros on the right for the next round
+                # and unless you're in the last round of testing,
                 if col < N - 1:
+                    # add a new column of 0s on the right for the next round
                     board_column_gen(temp)
-                # Add the new candidate to this round's list of successes
+                # add that new candidate to this round's list of successes
                 new_candidates.append(temp)
-    # Discard the "parent" candidates when finished with the round
+    # when finished with the round, discard the "parent" candidates
     candidates = new_candidates
 
-# Format results to match the assignment output
+# format results to match assignment output
 for item in coordinate_format(candidates):
     print(item)
