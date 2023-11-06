@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Module that contains the BaseGeometry class.
+Module for BaseGeometry
 """
 
 
@@ -14,9 +14,3 @@ class BaseGeometry:
         Placeholder method for calculating the area.
         """
         raise Exception("area() is not implemented")
-
-    def perimeter(self):
-        """
-        Placeholder method for calculating the perimeter.
-        """
-        raise Exception("perimeter() is not implemented")
