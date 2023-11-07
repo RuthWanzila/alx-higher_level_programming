@@ -3,6 +3,7 @@
 Function to convert a class instance into a dictionary for JSON serialization.
 """
 
+
 def class_to_json(obj):
     """
     Converts an instance of a class into a dictionary for JSON serialization.
