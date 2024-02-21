@@ -1,5 +1,4 @@
 #!/usr/bin/node
-""" prints the title of a Star Wars movie """
 const request = require('request');
 const episodeNum = process.argv[2];
 const API_URL = 'https://swapi-api.hbtn.io/api/films/';
